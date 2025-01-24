@@ -33,8 +33,16 @@ if (params.size == 0) {
 } else {
     // Si no hay datos en el localStorage, hacemos la solicitud a la API
     const quest = `escribeme un mensaje de cumpleanos para ` + ('h' == genero ? 'hombre' : 'mujer') + ` que se dedica a ${profesion} que se llama ${nombre}`;
-
-    fetch(`https://gemini-rest.vercel.app/api/?prompt=${encodeURIComponent(quest)}`)
+    const key = process.env.API_KEY;
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([
+            { "text": quest }
+          ])
+    })
         .then(res => res.json())
         .then(res => {
             const responseText = res.response;

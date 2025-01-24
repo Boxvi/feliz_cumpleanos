@@ -34,22 +34,30 @@ if (params.size == 0) {
     // Si no hay datos en el localStorage, hacemos la solicitud a la API
     const quest = `escribeme un mensaje de cumpleanos para ` + ('h' == genero ? 'hombre' : 'mujer') + ` que se dedica a ${profesion} que se llama ${nombre}`;
     const key = process.env.API_KEY;
-    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify([
-            { "text": quest }
-          ])
-    })
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+        "contents": [{
+            "parts": [{ "text": quest }]
+        }]
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
+
+    fetch(url, requestOptions)
         .then(res => res.json())
         .then(res => {
-            const responseText = res.response;
-            const separatedText = responseText.split('\n'); // Separa el texto por cada salto de línea
+            const separatedText = res.candidates[0].content.parts[0].text.split('\n');
 
             // Guardar la respuesta en el localStorage
-            localStorage.setItem('cumpleanero', responseText);
+            localStorage.setItem('cumpleanero', separatedText);
 
             const informacionHTML = `
                 <h1>${separatedText[0]}</h1>

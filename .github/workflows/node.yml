@@ -1,4 +1,4 @@
-name: Deploy
+name: hbd
 
 on:
   push:
@@ -48,4 +48,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
 
-          

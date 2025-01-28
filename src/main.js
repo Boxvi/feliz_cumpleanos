@@ -40,7 +40,8 @@ if (params.size == 0) {
 } else {
     // Si no hay datos en el localStorage, hacemos la solicitud a la API
     const quest = `generame un mensaje de cumpleanos sencillo, para  ` + ('h' == genero ? 'hombre' : 'mujer') + ` que se dedica a ${profesion} y que se llama ${nombre}, y que tenga 4 parrafos`;
-    const key = import.meta.env.VITE_API_KEY;
+//    const key = import.meta.env.VITE_API_KEY;
+    const key = process.env.VITE_API_KEY;
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
